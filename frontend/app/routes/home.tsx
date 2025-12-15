@@ -1,22 +1,101 @@
+import { useLoaderData, Form } from "react-router";
 import KioskLogo from "../assets/kiosk-logo.svg";
+import disclosureRequirement from "../data/disclosure-requirement.json";
+import type { DisclosureRequirement } from "../domain/csrd-form/DisclosureRequirement";
+import type { Question } from "../domain/csrd-form/Question";
 
-export async function loader() {
-  return {};
+export function loader(): DisclosureRequirement {
+  return disclosureRequirement as DisclosureRequirement; // TODO: proper mapping of string types to enum to avoid casting
 }
 
 export async function action() {
   return {};
 }
 
+function renderQuestionInput(question: Question) {
+  const inputId = `question-${question.id}`;
+
+  switch (question.type) {
+    case "number":
+      return (
+        <input
+          key={inputId}
+          id={inputId}
+          type="number"
+          name={question.id}
+          placeholder="Enter a number"
+        />
+      );
+    case "text":
+      return (
+        <textarea
+          key={inputId}
+          id={inputId}
+          name={question.id}
+          placeholder="Enter text"
+          rows={4}
+        />
+      );
+    case "enum":
+      return (
+        <select key={inputId} id={inputId} name={question.id}>
+          <option value="">Select an option</option>
+          {question.enumValues && (
+            <>
+              {question.enumValues.en.map((value, index) => (
+                <option key={index} value={value}>
+                  {value}
+                </option>
+              ))}
+            </>
+          )}
+        </select>
+      );
+    case "table":
+    case "section":
+      return null; // These are container types, handled separately
+    default:
+      return null;
+  }
+}
+
 export default function CSRDFormPage() {
+  const disclosureRequirement = useLoaderData<typeof loader>();
+
   return (
     <div>
       <img src={KioskLogo} alt="Kiosk Logo" width="200" />
       <h1>CSRD Disclosure Requirement Form</h1>
-      <p>
-        Welcome to the CSRD technical test. Please implement the form to display
-        and save answers to the disclosure requirement questions.
-      </p>
+      <Form method="post">
+        <div>
+          <h2>Questions</h2>
+          {disclosureRequirement.questions.map((question) => (
+            <fieldset key={question.id} style={{ marginBottom: "20px" }}>
+              <legend>
+                <strong>{question.labelEn}</strong>
+              </legend>
+              {question.type !== "table" &&
+                question.type !== "section" &&
+                renderQuestionInput(question)}
+              {question.relatedQuestions &&
+                question.relatedQuestions.length > 0 && (
+                  <div style={{ marginLeft: "20px" }}>
+                    {question.relatedQuestions.map((relatedQuestion) => (
+                      <fieldset
+                        key={relatedQuestion.id}
+                        style={{ marginBottom: "15px" }}
+                      >
+                        <legend>{relatedQuestion.labelEn}</legend>
+                        {renderQuestionInput(relatedQuestion)}
+                      </fieldset>
+                    ))}
+                  </div>
+                )}
+            </fieldset>
+          ))}
+          <button type="submit">Save Answers</button>
+        </div>
+      </Form>
     </div>
   );
 }
