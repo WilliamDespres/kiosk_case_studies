@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { CSRDFormService } from "./CSRDFormService";
-import type { CreateQuestionAnswerDTO } from "../../domain/csrd-form/QuestionAnswer";
+import type { CreateQuestionAnswerDTO } from "~/domain/csrd-form/QuestionAnswer";
 
 // Mock the repository
 vi.mock("../../infrastructure/database/QuestionAnswerRepository", () => {

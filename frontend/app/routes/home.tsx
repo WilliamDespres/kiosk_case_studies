@@ -1,11 +1,12 @@
 import { useLoaderData, Form } from "react-router";
-import KioskLogo from "../assets/kiosk-logo.svg";
-import disclosureRequirement from "../data/disclosure-requirement.json";
-import type { DisclosureRequirement } from "../domain/csrd-form/DisclosureRequirement";
-import type { Question } from "../domain/csrd-form/Question";
+import KioskLogo from "~/assets/kiosk-logo.svg";
+import { CSRDFormService } from "~/application/services/CSRDFormService";
+import type { DisclosureRequirement } from "~/domain/csrd-form/DisclosureRequirement";
+import type { Question } from "~/domain/csrd-form/Question";
 
 export function loader(): DisclosureRequirement {
-  return disclosureRequirement as DisclosureRequirement; // TODO: proper mapping of string types to enum to avoid casting
+  const service = new CSRDFormService();
+  return service.getDisclosureRequirement();
 }
 
 export async function action() {
