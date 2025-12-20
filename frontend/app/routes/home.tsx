@@ -1,8 +1,9 @@
-import { useLoaderData, Form } from "react-router";
-import KioskLogo from "~/assets/kiosk-logo.svg";
-import { CSRDFormService } from "~/application/services/CSRDFormService";
-import type { DisclosureRequirement } from "~/domain/csrd-form/DisclosureRequirement";
-import type { Question } from "~/domain/csrd-form/Question";
+import { useLoaderData, Form } from 'react-router';
+import KioskLogo from '~/assets/kiosk-logo.svg';
+import { CSRDFormService } from '~/application/services/CSRDFormService';
+import type { DisclosureRequirement } from '~/domain/csrd-form/DisclosureRequirement';
+import type { Question } from '~/domain/csrd-form/Question';
+import type { JSX } from 'react';
 
 export function loader(): DisclosureRequirement {
   const service = new CSRDFormService();
@@ -17,7 +18,7 @@ function renderQuestionInput(question: Question) {
   const inputId = `question-${question.id}`;
 
   switch (question.type) {
-    case "number":
+    case 'number':
       return (
         <input
           key={inputId}
@@ -27,7 +28,7 @@ function renderQuestionInput(question: Question) {
           placeholder="Enter a number"
         />
       );
-    case "text":
+    case 'text':
       return (
         <textarea
           key={inputId}
@@ -37,7 +38,7 @@ function renderQuestionInput(question: Question) {
           rows={4}
         />
       );
-    case "enum":
+    case 'enum':
       return (
         <select key={inputId} id={inputId} name={question.id}>
           <option value="">Select an option</option>
@@ -52,12 +53,37 @@ function renderQuestionInput(question: Question) {
           )}
         </select>
       );
-    case "table":
-    case "section":
+    case 'table':
+    case 'section':
       return null; // These are container types, handled separately
     default:
       return null;
   }
+}
+
+function renderQuestion(question: Question, depth: number = 0): JSX.Element {
+  const marginLeft = `${depth * 20}px`;
+
+  return (
+    <fieldset
+      key={question.id}
+      style={{ marginBottom: '20px', marginLeft: marginLeft }}
+    >
+      <legend>
+        <strong>{question.labelEn}</strong>
+      </legend>
+      {question.type !== 'table' &&
+        question.type !== 'section' &&
+        renderQuestionInput(question)}
+      {question.relatedQuestions && question.relatedQuestions.length > 0 && (
+        <div>
+          {question.relatedQuestions.map((relatedQuestion) =>
+            renderQuestion(relatedQuestion, depth + 1),
+          )}
+        </div>
+      )}
+    </fieldset>
+  );
 }
 
 export default function CSRDFormPage() {
@@ -70,30 +96,9 @@ export default function CSRDFormPage() {
       <Form method="post">
         <div>
           <h2>Questions</h2>
-          {disclosureRequirement.questions.map((question) => (
-            <fieldset key={question.id} style={{ marginBottom: "20px" }}>
-              <legend>
-                <strong>{question.labelEn}</strong>
-              </legend>
-              {question.type !== "table" &&
-                question.type !== "section" &&
-                renderQuestionInput(question)}
-              {question.relatedQuestions &&
-                question.relatedQuestions.length > 0 && (
-                  <div style={{ marginLeft: "20px" }}>
-                    {question.relatedQuestions.map((relatedQuestion) => (
-                      <fieldset
-                        key={relatedQuestion.id}
-                        style={{ marginBottom: "15px" }}
-                      >
-                        <legend>{relatedQuestion.labelEn}</legend>
-                        {renderQuestionInput(relatedQuestion)}
-                      </fieldset>
-                    ))}
-                  </div>
-                )}
-            </fieldset>
-          ))}
+          {disclosureRequirement.questions.map((question) =>
+            renderQuestion(question),
+          )}
           <button type="submit">Save Answers</button>
         </div>
       </Form>
