@@ -1,10 +1,10 @@
-import type { DisclosureRequirement } from "../../domain/csrd-form/DisclosureRequirement";
+import type { DisclosureRequirement } from "~/domain/csrd-form/DisclosureRequirement";
 import type {
   CreateQuestionAnswerDTO,
   QuestionAnswer,
-} from "../../domain/csrd-form/QuestionAnswer";
-import { QuestionAnswerRepository } from "../../infrastructure/database/QuestionAnswerRepository";
-import drData from "../../data/disclosure-requirement.json";
+} from "~/domain/csrd-form/QuestionAnswer";
+import { QuestionAnswerRepository } from "~/infrastructure/database/QuestionAnswerRepository";
+import drData from "~/data/disclosure-requirement.json";
 
 export class CSRDFormService {
   private readonly questionAnswerRepository: QuestionAnswerRepository;

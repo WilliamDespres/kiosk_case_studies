@@ -16,10 +16,32 @@
           "kioskId": "S1-6_02",
           "labelEn": "Number of employees (end of period)",
           "labelFr": "Nombre d'employés (fin de période)",
-          "type": "number",
+          "type": "table",
           "order": 0,
           "relatedQuestionId": "S1-6_01",
-          "unit": null
+          "unit": null,
+          "relatedQuestions": [
+            {
+              "id": "S1-6_02-nested",
+              "kioskId": "S1-6_02-nested",
+              "labelEn": "Number of employees (nested)",
+              "labelFr": "Nombre d'employés (imbriquée)",
+              "type": "number",
+              "order": 0,
+              "relatedQuestionId": "S1-6_02",
+              "unit": null
+            },
+            {
+              "id": "S1-6_02-nested-2",
+              "kioskId": "S1-6_02-nested-2",
+              "labelEn": "Number of employees 2 (nested)",
+              "labelFr": "Nombre d'employés 2 (imbriquée)",
+              "type": "text",
+              "order": 1,
+              "relatedQuestionId": "S1-6_02",
+              "unit": null
+            }
+          ]
         },
         {
           "id": "S1-6_03",
