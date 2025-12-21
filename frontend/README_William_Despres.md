@@ -37,7 +37,7 @@ The answers will be saved to the database using the provided credentials.
 
 ## AI usage
 
-- I used the AI assistant Copilot, powered by Claude, to implement and refactor parts of the code.
+- I used the AI assistant GitHub Copilot, powered by Claude, to implement and refactor parts of the code.
 - Most main features were developed using AI, including:
   - Fetching and rendering questions
   - Adding recursive rendering of nested questions so related questions render at any depth.
@@ -45,6 +45,13 @@ The answers will be saved to the database using the provided credentials.
   - Displaying a simple "Done!" banner using `useActionData()` after submit.
 
 - All AI-suggested changes were reviewed and adjusted manually in the codebase.
+
+### Some prompts I used
+
+- Modify the component to display the questions list.
+- Add inputs for each question depending on question type.
+- In home.tsx, handle nested questions: make sure any question can contain related questions, at any depth.
+- In home.tsx, in the function action(), use the CSRDFormService to save answers to database.
 
 ## What I'd improve next
 
