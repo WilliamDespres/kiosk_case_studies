@@ -29,10 +29,14 @@ export async function action({ request }: { request: Request }) {
   }
 
   if (!dtos.length) {
-    return { ok: false };
+    return { ok: false, error: 'No answers provided!' };
   }
 
-  await service.saveAnswers(dtos);
+  try {
+    await service.saveAnswers(dtos);
+  } catch {
+    return { ok: false, error: 'Sorry, an error occurred.' };
+  }
   return { ok: true };
 }
 
@@ -117,9 +121,14 @@ export default function CSRDFormPage() {
           )}
           <div style={{ display: 'flex', gap: '10px' }}>
             <button type="submit">Save Answers</button>
-            {actionData && actionData.ok && (
+            {actionData?.ok && (
               <div style={{ background: '#e6ffe6', paddingInline: '8px' }}>
-                Done!
+                Answers saved!
+              </div>
+            )}
+            {actionData?.ok === false && (
+              <div style={{ background: '#ff9595', paddingInline: '8px' }}>
+                {actionData?.error}
               </div>
             )}
           </div>
