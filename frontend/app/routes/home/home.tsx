@@ -39,6 +39,47 @@ export async function action({ request }: { request: Request }) {
 function renderQuestion(question: Question, depth: number = 0) {
   const marginLeft = `${depth * 20}px`;
 
+  if (question.type === 'table') {
+    return (
+      <fieldset
+        key={question.id}
+        style={{ marginBottom: '20px', marginLeft: marginLeft }}
+      >
+        <legend>
+          <strong>{question.labelEn}</strong>
+        </legend>
+        <table style={{ borderCollapse: 'collapse', width: '100%' }}>
+          <thead>
+            <tr>
+              {question.relatedQuestions &&
+                question.relatedQuestions.map((subQuestion) => (
+                  <th
+                    key={subQuestion.id}
+                    style={{ border: '1px solid #ccc', padding: '8px' }}
+                  >
+                    {subQuestion.labelEn}
+                  </th>
+                ))}
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              {question.relatedQuestions &&
+                question.relatedQuestions.map((subQuestion) => (
+                  <td
+                    key={subQuestion.id}
+                    style={{ border: '1px solid #ccc', padding: '8px' }}
+                  >
+                    <QuestionInput question={subQuestion} />
+                  </td>
+                ))}
+            </tr>
+          </tbody>
+        </table>
+      </fieldset>
+    );
+  }
+
   return (
     <fieldset
       key={question.id}
@@ -47,9 +88,7 @@ function renderQuestion(question: Question, depth: number = 0) {
       <legend>
         <strong>{question.labelEn}</strong>
       </legend>
-      {question.type !== 'table' && question.type !== 'section' && (
-        <QuestionInput question={question} />
-      )}
+      {question.type !== 'section' && <QuestionInput question={question} />}
       {question.relatedQuestions && question.relatedQuestions.length > 0 && (
         <div>
           {question.relatedQuestions.map((relatedQuestion) =>

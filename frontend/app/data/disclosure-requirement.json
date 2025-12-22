@@ -6,7 +6,7 @@
       "kioskId": "S1-6_01",
       "labelEn": "Global employees",
       "labelFr": "Employés globaux",
-      "type": "table",
+      "type": "section",
       "order": 0,
       "relatedQuestionId": null,
       "unit": null,
